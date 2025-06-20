@@ -35,12 +35,36 @@ export const ChatInterface = ({ documents }: ChatInterfaceProps) => {
     "What damages are excluded?"
   ];
 
-  const sampleResponses = [
-    "Based on your warranty document, your coverage expires on March 15, 2025. You have 3 months remaining on your warranty period.",
-    "Your warranty covers manufacturing defects, electrical failures, and normal wear and tear. However, accidental damage and water damage are excluded.",
-    "To claim warranty service, contact the manufacturer at 1-800-WARRANTY with your purchase receipt and product serial number. Service is typically processed within 5-7 business days.",
-    "The following are excluded from warranty coverage: accidental damage, water damage, cosmetic scratches, damage from misuse, and normal wear after the warranty period."
-  ];
+  // Create a proper mapping of questions to responses
+  const questionResponseMap = {
+    "When does my warranty expire?": "Based on your warranty document, your coverage expires on March 15, 2025. You have 3 months remaining on your warranty period.",
+    "What's covered under my warranty?": "Your warranty covers manufacturing defects, electrical failures, and normal wear and tear. However, accidental damage and water damage are excluded.",
+    "How do I claim warranty service?": "To claim warranty service, contact the manufacturer at 1-800-WARRANTY with your purchase receipt and product serial number. Service is typically processed within 5-7 business days.",
+    "What damages are excluded?": "The following are excluded from warranty coverage: accidental damage, water damage, cosmetic scratches, damage from misuse, and normal wear after the warranty period."
+  };
+
+  const getResponseForQuestion = (question: string): string => {
+    // First check for exact matches
+    if (questionResponseMap[question as keyof typeof questionResponseMap]) {
+      return questionResponseMap[question as keyof typeof questionResponseMap];
+    }
+
+    // Check for partial matches based on keywords
+    const lowerQuestion = question.toLowerCase();
+    
+    if (lowerQuestion.includes('expire') || lowerQuestion.includes('expir') || lowerQuestion.includes('when')) {
+      return questionResponseMap["When does my warranty expire?"];
+    } else if (lowerQuestion.includes('covered') || lowerQuestion.includes('cover') || lowerQuestion.includes('what')) {
+      return questionResponseMap["What's covered under my warranty?"];
+    } else if (lowerQuestion.includes('claim') || lowerQuestion.includes('service') || lowerQuestion.includes('how')) {
+      return questionResponseMap["How do I claim warranty service?"];
+    } else if (lowerQuestion.includes('excluded') || lowerQuestion.includes('exclude') || lowerQuestion.includes('damage')) {
+      return questionResponseMap["What damages are excluded?"];
+    }
+
+    // Default response for unmatched questions
+    return "I'm sorry, I couldn't find specific information about that in your warranty documents. Please try asking about warranty coverage, expiration dates, claim procedures, or excluded damages.";
+  };
 
   const handleSendMessage = (text: string) => {
     if (!text.trim()) return;
@@ -56,12 +80,12 @@ export const ChatInterface = ({ documents }: ChatInterfaceProps) => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI response
+    // Get the appropriate response for the question
     setTimeout(() => {
-      const randomResponse = sampleResponses[Math.floor(Math.random() * sampleResponses.length)];
+      const response = getResponseForQuestion(text.trim());
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: randomResponse,
+        text: response,
         isUser: false,
         timestamp: new Date()
       };
