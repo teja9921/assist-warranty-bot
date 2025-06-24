@@ -1,12 +1,12 @@
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUp, FileUp, MessageSquare, Shield, Upload, Zap } from 'lucide-react';
 import { ChatInterface } from '@/components/ChatInterface';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { FeatureCard } from '@/components/FeatureCard';
 import { HeroSection } from '@/components/HeroSection';
+import { Navigation } from '@/components/Navigation';
 
 const Index = () => {
   const [activeView, setActiveView] = useState<'home' | 'upload' | 'chat'>('home');
@@ -23,6 +23,7 @@ const Index = () => {
   if (activeView === 'upload') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
             <Button 
@@ -42,6 +43,7 @@ const Index = () => {
   if (activeView === 'chat') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
             <Button 
@@ -60,6 +62,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <Navigation />
+      
       {/* Hero Section */}
       <HeroSection onGetStarted={() => setActiveView('upload')} />
 
@@ -133,13 +137,13 @@ const Index = () => {
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center mb-4">
             <Shield className="h-8 w-8 text-blue-600 mr-2" />
-            <span className="text-2xl font-bold text-gray-900">WarrantyAI</span>
+            <span className="text-2xl font-bold text-gray-900">Warranty Wallet</span>
           </div>
           <p className="text-gray-600 mb-4">
             Intelligent warranty management powered by AI
           </p>
           <p className="text-sm text-gray-500">
-            © 2024 WarrantyAI. Built with modern AI technology.
+            © 2024 Warranty Wallet. Built with modern AI technology.
           </p>
         </div>
       </footer>
